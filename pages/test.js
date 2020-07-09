@@ -25,11 +25,12 @@ export const Test = (props) => {
 Test.getInitialProps = async () => {
     try {
         const people = await axios.get('https://swapi.dev/api/people');
+        const peopleWithId = await people.data.results.map((person) => ({
+            ...person,
+            id: person.url.split('/people/')[1].replace('/', ''),
+        }));
         return {
-            people: people.data.results.map((person) => ({
-                ...person,
-                id: person.url.split('/people/')[1].replace('/', ''),
-            })),
+            people: peopleWithId,
         };
     } catch (err) {
         console.log('**************** ERROR ************************');
